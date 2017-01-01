@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!-- RESOURCES:
+Twitter icon: https://about.twitter.com/company/brand-assets
+Misc Icons: design.google.com/icons
+-->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <title>Asher Foster</title>
+        <style>
+            *{
+                position: relative;
+            }
+            html, body{
+                font-family: "Open Sans", "Arial", sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            video{
+                position: fixed;
+                height: 100vh;
+                width: 100vw;
+                object-fit: cover;
+            }
+            main{
+                position: fixed;
+                background: rgba(0,0,0,0.3);
+                padding-top: 23vh;
+                min-height: 77vh;
+                width: 100vw;
+                z-index: 1;
+                text-align: center;
+                color: #FFF;
+                font-size: 1.5em;
+            }
+            #title{
+                font-size: 3em;
+                font-weight: 100;
+                margin-bottom: 0.5em;
+            }
+            #title span{
+                background: #FFF;
+                color: #222;
+            }
+            .button{
+                -webkit-transition: background 0.3s;
+                -moz-transition: background 0.3s;
+                -o-transition: background 0.3s;
+                transition: background 0.3s;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+                margin: 10px auto;
+                width: 250px;
+                height: 50px;
+                border: 2px solid #FFF;
+                border-radius: 25px;
+                color: inherit;
+            }
+            .button:hover{
+                -webkit-transition: background 0.3s;
+                -moz-transition: background 0.3s;
+                -o-transition: background 0.3s;
+                transition: background 0.3s;
+            }
+            .button:hover .b-name{
+                text-decoration: underline;
+            }
+            .button img{
+                vertical-align: middle;
+                margin-left: 20px;
+                height: 50px;
+            }
+            .b-icon {
+                display: inline-block;
+                width: 40%;
+            }
+            .b-name{
+                width: 40%;
+                display: inline-block;
+                vertical-align: middle;
+                text-align: center;
+            }
+            #twitter{
+                border-color: #55ACEE;
+                color: #55ACEE;
+            }
+            #twitter:hover{
+                background: rgba(85, 172, 238, 0.3);
+            }
+            #site:hover, #about:hover{
+                background: rgba(255, 255, 255, 0.3);
+            }
+            #info{
+                -webkit-transition: right 0.3s;
+                -moz-transition: right 0.3s;
+                -o-transition: right 0.3s;
+                transition: right 0.3s;
+                z-index: 2;
+                top: 0;
+                position: fixed;
+                right: -390px;
+                background: #FFF;
+                width: 350px;
+                height: 100vh;
+                padding: 20px;
+                overflow-y: scroll;
+            }
+        </style>
+    </head>
+    <body>
+        <video src="video.mp4" autoplay loop></video>
+        <main>
+            <h1 id="title">ASHER<span>FOSTER</span></h1>
+            <a href="https://twitter.com/asherfoster" class="button" id="twitter">
+                <span class="b-icon"><img alt="Twitter Icon" src="twitter.png"></span>
+                <span class="b-name">Twitter</span>
+            </a>
+            <a href="//asherfoster.com" class="button" id="site">
+                <span class="b-icon"><img alt="Website Icon" src="web.svg"></span>
+                <span class="b-name">Website</span>
+            </a>
+            <a href="#" class="button" id="about">
+                <span class="b-icon"><img alt="About Me" src="about.svg"></span>
+                <span class="b-name">About</span>
+            </a>
+        </main>
+        <div id="info">
+            <h2>About Me</h2>
+            <p>Lorem ipsum dolor sit amet, vix ubique verear te, ut assum ancillae sit.
+                Ex nam corrumpit aliquando, in ius dolor nostro volutpat, mea id graecis necessitatibus.
+                Mea eu quis vidit mediocritatem, atqui harum munere vel ei.
+                Putant scripta ut nam, quo case saepe elaboraret ut.
+                <br>
+                Qui mundi atomorum ne, duo an labores singulis conceptam, sed augue consul no.
+                Probo equidem vis eu, has ex case wisi alienum, eum ut eius facer. Minim elitr usu ei,
+                graecis dignissim constituam cum ei, possim interpretaris cu eam.
+                Ad etiam eirmod dissentias sed, et vis saepe legimus, his quod tractatos dissentias te.
+                Sale inimicus consequat no quo, per ad alienum tibique phaedrum.
+                In suas dicunt eripuit nam, te per autem semper recusabo.
+                <br>
+                Ne sed atqui eloquentiam. Ut inani definitionem sit, mei consul platonem ad.
+                Atomorum indoctum patrioque vim te, assum epicuri patrioque id est, paulo graece impetus nam ne.
+                Stet reprehendunt vis et, nam ipsum dicit dicant at, ius affert homero et.
+                <br>
+                Cu numquam facilisi pri, ex cum justo illum quando.
+                Id mea deleniti prodesset suscipiantur, scripta nominati quo te, eam ut soluta labitur.
+                At mei sumo vitae, mea id debet ponderum vituperatoribus.
+                Graeco vivendum evertitur cu qui, tation aperiri et quo, pro vide officiis philosophia at.
+            </p>
+        </div>
+        <script type="text/javascript">
+            var about = document.getElementById("info"),
+                aboutToggle = document.getElementById("about"),
+//                main = document.getElementsByTagName("main")[0],
+                open = false;
+            function toggleAbout(){
+                if(open) about.style.right = "";
+                else about.style.right = "0";
+                open = !open;
+            }
+            aboutToggle.onclick = toggleAbout;
+        </script>
+    </body>
+</html>

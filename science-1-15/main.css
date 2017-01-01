@@ -1,0 +1,173 @@
+/*
+Copyright (c) 2016 Asher Foster
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Yes, I know this code is awful, but it's not a code exam so screw efficiency and tidiness.
+This will be 1MB if I want it to be, thank you very much -_-
+*/
+
+*{
+    font-family: 'Open Sans', sans-serif;
+    position: relative;
+}
+html, body{
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: -webkit-linear-gradient(top, #915500 0%,#000000 10%) no-repeat;
+}
+h1{
+    font-weight: 100;
+}
+img{
+    max-width: 100%;
+}
+#pointer{
+    height: 18em;
+    width: 0.3em;
+    background: #FFC107;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: pointer 54.6s linear infinite;
+}
+#moon-ind{
+    border-radius: 50%;
+    -webkit-animation: moon-ind 54.6s linear infinite;
+    height: 10em;
+    background: #FFF;
+}
+#moon, #moon-surface{
+    height: 2em;
+    width: 2em;
+    border-radius: 50%;
+}
+#moon{
+    top: calc(50vh - 1em);
+    left: calc(50vw - 1em);
+    -webkit-animation: moon 54.6s linear infinite;
+}
+#moon-surface{
+    position: absolute;
+    background: url(moon.jpg);
+    background-size: contain;
+}
+#moon-shadow-wrap{
+    -webkit-animation: earth 54.6s linear infinite;
+    -webkit-animation-direction: reverse;
+    width: 2em;
+    height: 2em;
+}
+#moon-shadow{
+    background: #000;
+    top: 1em;
+    height: 1em;
+    width: 2em;
+    border-radius: 0 0 2em 2em;
+}
+#ocean, #earth {
+    height: 8em;
+    width: 8em;
+    border-radius: 50%;
+}
+#ocean{
+    position: absolute;
+    top: calc(50vh - 4em);
+    left: 0;
+    right: 0;
+    background: -webkit-linear-gradient(bottom, #062836 47%,#1976d2 53%);
+    margin: auto;
+}
+#earth{
+    -webkit-animation: earth 2s linear infinite;
+    background: url(earth.svg) no-repeat;
+    background-size: contain;
+}
+#toggle-boring{
+    position: absolute;
+    right: 1em;
+    bottom: 1em;
+    border-radius: 0.2em;
+    display: inline-block;
+    background: #03A9F4;
+    padding: 0.3em;
+}
+#click-catcher{
+    display: none;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+}
+#boring{
+    height: calc(100vh - 2em);
+    overflow-y: scroll;
+    padding: 1em;
+    width: 30em;
+    background: #FFF;
+    position: absolute;
+    top: 0;
+    right: -35em;
+    -webkit-transition: right 0.5s ease-in-out;
+}
+a{
+    display: block;
+}
+@-webkit-keyframes earth {
+    from{
+        -webkit-transform: rotate(360deg);
+    }
+    to{
+        -webkit-transform: rotate(0deg);
+    }
+}
+@-webkit-keyframes moon {
+    from{
+        -webkit-transform: rotate(360deg) translateY(20em);
+    }
+    to{
+        -webkit-transform: rotate(0deg) translateY(20em);
+    }
+}
+@-webkit-keyframes pointer {
+    from{
+        -webkit-transform: rotate(360deg) translateY(10em);
+    }
+    to{
+        -webkit-transform: rotate(0deg) translateY(10em);
+    }
+}
+@-webkit-keyframes moon-ind {
+    0%{
+        width: 0;
+    }
+    14%{
+        width: 2.5em;
+    }
+    25%{
+        width: 5em;
+    }
+    35%{
+        width: 7.5em
+    }
+    50%{
+        width: 10em;
+    }
+    64%{
+        width: 7.5em;
+    }
+    75%{
+        width: 5em;
+    }
+    85%{
+        width: 2.5em;
+    }
+    100%{
+        width: 0;
+    }
+}
