@@ -1,10 +1,51 @@
-nav a {
-  color: inherit;
+html, body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
 }
 
+/* Nav */
+nav {
+  background: #EEE;
+  padding: 16px;
+}
+nav a {
+  padding: 16px;
+  color: inherit;
+}
+nav a:hover {
+  background: #DDD;
+}
+
+/* Views */
 .view {
+  padding: 0 12px;
+}
+.view:not(.active) {
   display: none;
 }
-.template {
+
+/* Notification */
+#notification {
+  position: fixed;
+  top: 100vh;
+  width: 100vw;
+  background: #4caf50;
+  color: #FFF;
+  text-align: center;
+  transition: top 0.7s;
   display: none;
+}
+#timer {
+  width: 100%;
+  height: 8px;
+  background: rgba(0,0,0,0.2);
+}
+
+/* Sales page */
+#sales-items li {
+  cursor: pointer;
+  padding: 12px;
+}
+#sales-items li:hover {
+  background: #EEE;
 }

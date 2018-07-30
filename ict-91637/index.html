@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <title>Comic Managing Thing</title>
-    <link rel="stylesheet" href="styles.css" type="text/css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
   </head>
   <body>
     <nav>
@@ -12,15 +13,18 @@
       <a href="#" onclick="goTo('stats')">Stats</a>
     </nav>
     <div id="sales" class="view">
-      <ul>
-        <li class="sales-item template">{name} - {amount}</li>
-      </ul>
+      <h1>Sell all of the things.</h1>
+      <ul id="sales-items"></ul>
     </div>
     <div id="stock" class="view">
       <h1>Stock</h1>
     </div>
     <div id="stats" class="view">
       <h1>Stats!</h1>
+    </div>
+    <div id="notification">
+      <div id="timer"></div>
+      <p id="notification-text">This is a notification!</p>
     </div>
     <script src="index.js"></script>
   </body>
