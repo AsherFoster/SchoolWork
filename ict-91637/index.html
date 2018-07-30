@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Comic Managing Thing</title>
+    <link rel="stylesheet" href="styles.css" type="text/css">
+  </head>
+  <body>
+    <nav>
+      <a href="#" onclick="goTo('sales')">Sales</a>
+      <a href="#" onclick="goTo('stock')">Stock</a>
+      <a href="#" onclick="goTo('stats')">Stats</a>
+    </nav>
+    <div id="sales" class="view">
+      <ul>
+        <li class="sales-item template">{name} - {amount}</li>
+      </ul>
+    </div>
+    <div id="stock" class="view">
+      <h1>Stock</h1>
+    </div>
+    <div id="stats" class="view">
+      <h1>Stats!</h1>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
