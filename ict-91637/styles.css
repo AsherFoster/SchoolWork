@@ -32,7 +32,7 @@ nav a:hover {
   background: #4caf50;
   color: #FFF;
   text-align: center;
-  transition: top 0.7s;
+  transition: top 0.5s;
   display: none;
 }
 #timer {
@@ -42,10 +42,10 @@ nav a:hover {
 }
 
 /* Sales page */
-#sales-items li {
+li {
   cursor: pointer;
   padding: 12px;
 }
-#sales-items li:hover {
+li:hover {
   background: #EEE;
 }

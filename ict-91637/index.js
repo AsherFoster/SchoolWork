@@ -12,6 +12,10 @@ class Store {
         this.sales[title] = (0 || this.sales[title]) + amount;
         return this.changeStock(title, -amount);
     }
+    // Gets the full Comic object for a given title
+    getItem(title) {
+        return this.items.find(c => c.title === title);
+    }
 }
 const store = new Store([
     {
@@ -40,15 +44,37 @@ goTo(document.getElementsByClassName('view')[0].id);
 const salesItemsWrapper = document.getElementById('sales-items');
 store.items.forEach(comic => {
     const item = document.createElement('li');
-    item.appendChild(document.createTextNode(`${comic.title} -- ${comic.amount}`));
+    item.appendChild(document.createTextNode(''));
     item.setAttribute('data-title', comic.title);
     item.addEventListener('click', function () { sellItem(this); });
     salesItemsWrapper.appendChild(item);
 });
+function renderSalesPage() {
+    for (let item of salesItemsWrapper.children) {
+        const comic = store.getItem(item.getAttribute('data-title'));
+        item.textContent = `${comic.title} -- ${comic.amount}`;
+    }
+}
 function sellItem(el) {
     const title = el.getAttribute('data-title');
+    if (store.getItem(title).amount < 1)
+        return queueNotif(`${title} is out of stock`, 3000, 'error');
     store.sell(title);
-    queueNotif(`Sold "${title}"`);
+    render();
+    queueNotif(`Sold "${title}"`, 1000);
+}
+// Stock page
+const stockItemWrapper = document.getElementById('stock-items');
+store.items.forEach(comic => {
+    const item = document.createElement('li');
+    const text = document.createElement('p');
+    text.appendChild(document.createTextNode(''));
+    item.appendChild(text);
+    item.setAttribute('data-title', comic.title);
+    stockItemWrapper.appendChild(item);
+});
+function render() {
+    renderSalesPage();
 }
 const notifQueue = [];
 const notifColors = {
@@ -93,9 +119,10 @@ function doNotif({ duration, color, message }) {
                 if (notifQueue.length) {
                     setTimeout(() => {
                         doNotif(notifQueue.shift());
-                    }, 100);
+                    }, 50);
                 }
-            }, 1000);
+            }, 500);
         }, duration);
-    }, 100);
+    }, 50);
 }
+render();
