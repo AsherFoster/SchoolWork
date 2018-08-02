@@ -5,28 +5,46 @@
     <title>Comic Managing Thing</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <!-- dev version -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- production version, optimized for size and speed -->
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
   </head>
   <body>
-    <nav>
-      <a href="#" onclick="goTo('sales')">Sell things</a>
-      <a href="#" onclick="goTo('stock')">Stock things</a>
-      <a href="#" onclick="goTo('stats')">Stat things</a>
-    </nav>
-    <div id="sales" class="view">
-      <h1>Sell things!</h1>
-      <ul id="sales-items"></ul>
-    </div>
-    <div id="stock" class="view">
-      <h1>Stock things!</h1>
-      <ul id="stock-items"></ul>
-    </div>
-    <div id="stats" class="view">
-      <h1>Stats?</h1>
-      <ul id="stats-items"></ul>
-    </div>
-    <div id="notification">
-      <div id="timer"></div>
-      <p id="notification-text">Something's broken.</p>
+    <div id="app">
+      <nav>
+        <nav-link href="sales">Sales</nav-link>
+        <nav-link href="stock">Stocking</nav-link>
+        <nav-link href="stats">Statistics</nav-link>
+      </nav>
+      <div id="sales" v-if="page === 'sales'">
+        <h1>Sell things!</h1>
+        <ul>
+          <li v-for="comic in store.items" @click="() => sell(comic.title)">
+            {{comic.title}} -- {{comic.amount}}
+          </li>
+        </ul>
+      </div>
+      <div id="stock" v-if="page === 'stock'">
+        <h1>Stock things!</h1>
+        <ul>
+          <li v-for="comic in store.items">
+            {{comic.title}}
+            <span>- {{comic.amount}} +</span>
+          </li>
+        </ul>
+      </div>
+      <div id="stats" v-if="page === 'stats'">
+        <h1>Stats?</h1>
+        <ul>
+          <li v-for="comic in store.items">{{comic.title}}</li>
+        </ul>
+      </div>
+      <transition name="slide">
+        <div id="notification" v-if="notification" :style="{background: notification.color}">
+          <p id="notification-text">{{notification.message}}</p>
+        </div>
+      </transition>
     </div>
     <script src="index.js"></script>
   </body>

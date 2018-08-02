@@ -1,6 +1,17 @@
 html, body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
+  background: #EEE;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+#app {
+  background: #FFF;
+  margin: auto;
+  max-width: 800px;
+  min-height: 100vh;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.7);
 }
 
 /* Nav */
@@ -16,29 +27,24 @@ nav a:hover {
   background: #DDD;
 }
 
-/* Views */
-.view {
-  padding: 0 12px;
+/* Transitions */
+.slide-enter-active, .slide-leave-active {
+  transition: top .5s;
 }
-.view:not(.active) {
-  display: none;
+.slide-enter, .slide-leave-to {
+  top: 100vh !important;
 }
 
 /* Notification */
 #notification {
   position: fixed;
-  top: 100vh;
-  width: 100vw;
+  top: calc(100vh - 59px);
+  width: 800px;
+  max-width: 100%;
   background: #4caf50;
+  border-top: 8px solid rgba(0,0,0,0.2);
   color: #FFF;
   text-align: center;
-  transition: top 0.5s;
-  display: none;
-}
-#timer {
-  width: 100%;
-  height: 8px;
-  background: rgba(0,0,0,0.2);
 }
 
 /* Sales page */
