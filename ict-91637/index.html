@@ -35,7 +35,7 @@
               <!--<button @click="() => comic.amount&#45;&#45;">-</button>-->
               <!--<span class="stock-amount">{{comic.amount}}</span>-->
               <!--<button @click="() => comic.amount++">+</button>-->
-              <input type="number" v-model="comic.amount" class="stock-amount">
+              <input type="number" @input="(e) => stockUpdate(comic, e)" :value="comic.amount" class="stock-amount">
             </span>
           </li>
         </ul>

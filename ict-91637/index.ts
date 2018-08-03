@@ -52,12 +52,14 @@ function doNotif(notif: QueuedNotif) {
   app.notification = notif;
   setTimeout(() => {
     // Ends it
-    app.notification = null;
     // Queues the next
     if(app.notifQueue.length) {
+      app.notification = false;
       setTimeout(() => {
         doNotif(app.notifQueue.shift())
       }, 500);
+    } else {
+      app.notification = null;
     }
   }, notif.duration);
 }
@@ -89,8 +91,14 @@ const app = new Vue({
     },
     queueNotif(message: string, duration: number = 3000, color: string = 'info') {
       this.notifQueue.push({message, duration, color: notifColors[color]});
-      if(!this.notification)
+      if(this.notification === null)
         doNotif(this.notifQueue.shift());
+    },
+    stockUpdate(comic: Comic, e: any) {
+      const amount = +e.target.value;
+      if(amount >= 0) {
+        comic.amount = amount;
+      }
     }
   },
   computed: {
