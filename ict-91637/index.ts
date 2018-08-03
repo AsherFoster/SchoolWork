@@ -13,7 +13,7 @@ class Store {
   }
   // Tracks the sale and changes the stock amount for a comic
   public sell(title: string, amount: number = 1): number {
-    this.sales[title] = (0 || this.sales[title]) + amount;
+    this.sales[title] = (this.sales[title] || 0) + amount;
     return this.changeStock(title, -amount);
   }
   // Gets the full Comic object for a given title
@@ -92,6 +92,9 @@ const app = new Vue({
       if(!this.notification)
         doNotif(this.notifQueue.shift());
     }
+  },
+  computed: {
+    sales: () => store.sales
   }
 });
 

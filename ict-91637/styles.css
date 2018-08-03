@@ -6,6 +6,10 @@ html, body {
   min-height: 100vh;
 }
 
+.flex {
+  flex: 1;
+}
+
 #app {
   background: #FFF;
   margin: auto;
@@ -47,11 +51,27 @@ nav a:hover {
   text-align: center;
 }
 
-/* Sales page */
+/* Lists */
+ul {
+  list-style: none;
+  padding-left: 0;
+}
 li {
-  cursor: pointer;
+  display: flex;
   padding: 12px;
 }
-li:hover {
-  background: #EEE;
+li:nth-child(even) {
+  background: #F1F1F1;
+}
+li.select {
+  cursor: pointer;
+}
+li.select:hover {
+  background: #DDD;
+}
+
+.stock-amount {
+  display: inline-block;
+  text-align: center;
+  width: 40px;
 }

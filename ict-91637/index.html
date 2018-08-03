@@ -20,7 +20,7 @@
       <div id="sales" v-if="page === 'sales'">
         <h1>Sell things!</h1>
         <ul>
-          <li v-for="comic in store.items" @click="() => sell(comic.title)">
+          <li v-for="comic in store.items" @click="() => sell(comic.title)" class="select">
             {{comic.title}} -- {{comic.amount}}
           </li>
         </ul>
@@ -30,14 +30,24 @@
         <ul>
           <li v-for="comic in store.items">
             {{comic.title}}
-            <span>- {{comic.amount}} +</span>
+            <span class="flex"></span>
+            <span>
+              <!--<button @click="() => comic.amount&#45;&#45;">-</button>-->
+              <!--<span class="stock-amount">{{comic.amount}}</span>-->
+              <!--<button @click="() => comic.amount++">+</button>-->
+              <input type="number" v-model="comic.amount" class="stock-amount">
+            </span>
           </li>
         </ul>
       </div>
       <div id="stats" v-if="page === 'stats'">
         <h1>Stats?</h1>
         <ul>
-          <li v-for="comic in store.items">{{comic.title}}</li>
+          <li v-for="comic in store.items">
+            {{comic.title}}
+            <span class="flex"></span>
+            {{sales[comic.title] || 'None sold'}}
+          </li>
         </ul>
       </div>
       <transition name="slide">
