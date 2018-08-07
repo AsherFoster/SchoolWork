@@ -17,39 +17,58 @@
         <nav-link href="stock">Stocking</nav-link>
         <nav-link href="stats">Statistics</nav-link>
       </nav>
-      <div id="sales" v-if="page === 'sales'">
-        <h1>Sell things!</h1>
+      <nav-view name="sales" :current="page">
+        <h1>Sell comics.</h1>
+        <div class="list-header">
+          Title
+          <span class="flex"></span>
+          Amount
+        </div>
         <ul>
+          <!-- @click registers click handler -->
           <li v-for="comic in store.items" @click="() => sell(comic.title)" class="select">
-            {{comic.title}} -- {{comic.amount}}
+            {{comic.title}}
+            <span class="flex"></span>
+            {{comic.amount}}
           </li>
         </ul>
-      </div>
-      <div id="stock" v-if="page === 'stock'">
+      </nav-view>
+      <nav-view name="stock" :current="page">
         <h1>Stock things!</h1>
+        <div class="list-header">
+          Title
+          <span class="flex"></span>
+          Amount in stock
+        </div>
         <ul>
-          <li v-for="comic in store.items">
+          <li v-for="comic in stockItems">
             {{comic.title}}
             <span class="flex"></span>
             <span>
               <!--<button @click="() => comic.amount&#45;&#45;">-</button>-->
               <!--<span class="stock-amount">{{comic.amount}}</span>-->
               <!--<button @click="() => comic.amount++">+</button>-->
-              <input type="number" @input="(e) => stockUpdate(comic, e)" :value="comic.amount" class="stock-amount">
+              <span v-if="comic.error">{{comic.error}}</span>
+              <input type="number" @input="(e) => stockUpdate(comic.title, e)" :value="comic.displayAmount" class="stock-amount">
             </span>
           </li>
         </ul>
-      </div>
-      <div id="stats" v-if="page === 'stats'">
-        <h1>Stats?</h1>
+      </nav-view>
+      <nav-view name="stats" :current="page">
+        <h1>Sales stats</h1>
+        <div class="list-header">
+          Title
+          <span class="flex"></span>
+          Amount sold
+        </div>
         <ul>
           <li v-for="comic in store.items">
             {{comic.title}}
             <span class="flex"></span>
-            {{sales[comic.title] || 'None sold'}}
+            {{store.sales[comic.title] || 'None sold'}}
           </li>
         </ul>
-      </div>
+      </nav-view>
       <transition name="slide">
         <div id="notification" v-if="notification" :style="{background: notification.color}">
           <p id="notification-text">{{notification.message}}</p>

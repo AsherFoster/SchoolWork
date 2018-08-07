@@ -52,6 +52,11 @@ nav a:hover {
 }
 
 /* Lists */
+.list-header {
+  padding: 12px;
+  border-bottom: 1px solid #DDD;
+  display: flex;
+}
 ul {
   list-style: none;
   padding-left: 0;
