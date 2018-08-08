@@ -3,12 +3,19 @@ interface Comic {
   amount: number;
 }
 class Store {
-  // Object used to keep track of which comics are sold
+  /*
+    This class is a reasonably generic Store. Initial items are passed to the constructor, and more items could be
+    added by modifying .items. Items are expected to have a unique title attribute, as well as an amount.
+    Not using classes for items for simplicity, could be changed in the future.
+    Titles are being treated as unique IDs, again, for simplicity.
+    The .items array is a array of objects, rather than a title:amount object to allow for future metadata easily.
+   * */
+  // Object used to keep track of how many comics have been sold
   public sales = {};
   constructor(
     public items: Comic[] = []
   ) {}
-  // Changes the amount of a given comic in stock. Does not affect sales
+  // Changes the amount of a given comic in stock. Does not affect sales (Can be negative)
   public changeStock(title: string, amount: number): number {
     return this.items.find(c => c.title === title).amount += amount
   }
@@ -17,14 +24,14 @@ class Store {
     this.sales[title] = (this.sales[title] || 0) + amount;
     return this.changeStock(title, -amount);
   }
-  // Gets the full Comic object for a given title
+  // Gets the full Comic object for a given title. Doesn't just return the amount, making future metadata easier
   public getItem(title: string): Comic|null {
     return this.items.find(c => c.title === title)
   }
 }
 
-// Add more comics here
-const store = new Store([
+// Create a new store, and pass the initial comics. Add more comics here.
+const comicStore = new Store([
   {
     title: 'Super Dude',
     amount: 8
@@ -39,18 +46,20 @@ const store = new Store([
   }
 ]);
 
-// Add a bunch of random comics
+// Add a bunch of random comics, to populate the page.
 const comicNames = [
   ['Super', 'Awesome', 'Fantastic', 'Mega', 'Evil', 'Wonder', 'Lizard', 'Magic'],
   ['Man', 'Woman', 'Person', 'Thing', 'Lizard', 'Monster', 'Machine', 'Robot'],
   ['', '', '2', 'II']
 ];
 Array(50).fill(1).forEach(() => {
-  store.items.push({
+  comicStore.items.push({
     title: comicNames.map(n => n[Math.floor(Math.random() * n.length)]).join(' '),
     amount: Math.floor(Math.random() * 100)
   });
 });
+// Dedupe the items, preventing name clash issues
+comicStore.items.filter((item, i) => comicStore.items.indexOf(item) === i);
 
 // Notification stuff
 interface QueuedNotif {
@@ -63,23 +72,25 @@ const notifColors = {
   'error': '#f44336'
 };
 
-// A link component to switch between views
+// Navigation
+// Link used to navigate between views. Uses quick & dirty this.$parent to update the view.
 Vue.component('navLink', {
   props: ['href'],
   template: `<a @click="navigate" href="#"><slot></slot></a>`,
   methods: {
     navigate() {
-      if(app.page === this.href) return; // Ignore if same page
+      if(this.$parent.page === this.href) return; // Ignore if same page
       // Change the view, and call the route update handler
-      if(app.routeUpdate) app.routeUpdate(this.href, app.page);
-      app.page = this.href;
+      if(this.$parent.routeUpdate) this.$parent.routeUpdate(this.href, this.$parent.page);
+      this.$parent.page = this.href;
     }
   }
 });
-// A view wrapper component
+// Shows the view if the name prop matches the parent's page. Again, using quick & dirty $parent,
+// which should be changed if the app were to be more complex
 Vue.component('navView', {
-  props: ['name', 'current'],
-  template: '<div class="view" :name="name" v-if="current === name"><slot></slot></div>'
+  props: ['name'],
+  template: '<div class="view" :id="\'view-\' + name" v-if="$parent.page === name"><slot></slot></div>'
 });
 
 
@@ -87,11 +98,11 @@ Vue.component('navView', {
 const app = new Vue({
   el: '#app', // Bind to the #app element
   data: {
-    store, // Give access to the store
+    store: comicStore, // Give access to the comicStore
     notification: null, // Current notification
     notifQueue: [], // Queue of notifications to display
     page: 'sales', // Current page being displayed
-    stockItems: store.items.map(i => ({ // Initializes the stock page
+    stockItems: comicStore.items.map(i => ({ // Initializes the stock page
       displayAmount: i.amount,
       error: '',
       title: i.title
@@ -100,9 +111,9 @@ const app = new Vue({
   methods: {
     // Sells a comic, if possible
     sell(title: string) {
-      if(store.getItem(title).amount < 1)
+      if(comicStore.getItem(title).amount < 1)
         return this.queueNotif(`${title} is out of stock`, 3000, 'error');
-      store.sell(title);
+      comicStore.sell(title);
       this.queueNotif(`Sold "${title}"`, 1000);
     },
     // Queues a notification
@@ -110,35 +121,6 @@ const app = new Vue({
       this.notifQueue.push({message, duration, color: notifColors[color]});
       if(this.notification === null)
         this.doNotif(this.notifQueue.shift());
-    },
-    // Input event handler for stock inputs
-    stockUpdate(title: string, e: any) {
-      const value = e.target.value;
-      const amount = +value; // Accepts any input that can be converted to a positive integer
-      const stockItem = this.stockItems.find(i => i.title === title);
-      if((amount !== 0 && !amount) || !value) { // Shows appropriate error
-        stockItem.error = 'Invalid number';
-      } else if(amount < 0) {
-        stockItem.error = 'Must be positive';
-      } else if(amount % 1) {
-        stockItem.error = 'Must be an integer';
-      } else if(amount > Number.MAX_SAFE_INTEGER) {
-        stockItem.error = 'Ok, that number is a bit big.';
-      } else { // If valid, update stock amount, hide error
-        this.store.getItem(title).amount = amount;
-        stockItem.error = '';
-      }
-      stockItem.displayAmount = value; // Updates the text input's value to the value because binding!
-    },
-    // Route update to clean up stock page when loaded again
-    routeUpdate(to: string, from: string) {
-      if(to === 'stock') {
-        this.stockItems = store.items.map(i => ({
-          displayAmount: i.amount,
-          error: '',
-          title: i.title
-        }));
-      }
     },
     // Internal function to execute the notification. Use app.queueNotif
     doNotif(notif: QueuedNotif) {
@@ -155,11 +137,35 @@ const app = new Vue({
           this.notification = null;
         }
       }, notif.duration);
+    },
+    // Input event handler for stock inputs
+    stockUpdate(title: string, e: any) {
+      const value = e.target.value;
+      const amount = +value; // Accepts any input that can be converted to a positive integer
+      const stockItem = this.stockItems.find(i => i.title === title);
+      if((amount !== 0 && !amount) || !value) { // Shows appropriate error
+        stockItem.error = 'Invalid number';
+      } else if(amount < 0) {
+        stockItem.error = 'Must be positive';
+      } else if(amount % 1) {
+        stockItem.error = 'Must be an integer';
+      } else if(amount > Number.MAX_SAFE_INTEGER) {
+        stockItem.error = 'Ok, that number is a bit big.';
+      } else { // If valid, update stock amount, hide error
+        this.comicStore.getItem(title).amount = amount;
+        stockItem.error = '';
+      }
+      stockItem.displayAmount = value; // Updates the text input's value to the value because binding!
+    },
+    // Route update to clean up stock page when loaded again
+    routeUpdate(to: string, from: string) {
+      if(to === 'stock') {
+        this.stockItems = this.store.items.map(i => ({
+          displayAmount: i.amount,
+          error: '',
+          title: i.title
+        }));
+      }
     }
   }
 });
-
-// if(exports) {
-//   exports.app = app;
-//   exports.Store = store;
-// }
