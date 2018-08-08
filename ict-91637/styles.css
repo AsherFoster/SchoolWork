@@ -1,0 +1,82 @@
+html, body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #EEE;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+.flex {
+  flex: 1;
+}
+
+#app {
+  background: #FFF;
+  margin: auto;
+  max-width: 800px;
+  min-height: 100vh;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.7);
+}
+
+/* Nav */
+nav {
+  background: #EEE;
+  padding: 16px;
+}
+nav a {
+  padding: 16px;
+  color: inherit;
+}
+nav a:hover {
+  background: #DDD;
+}
+
+/* Transitions */
+.slide-enter-active, .slide-leave-active {
+  transition: top .5s;
+}
+.slide-enter, .slide-leave-to {
+  top: 100vh !important;
+}
+
+/* Notification */
+#notification {
+  position: fixed;
+  top: calc(100vh - 59px);
+  width: 800px;
+  max-width: 100%;
+  background: #4caf50;
+  border-top: 8px solid rgba(0,0,0,0.2);
+  color: #FFF;
+  text-align: center;
+}
+
+/* Lists */
+.list-header {
+  padding: 12px;
+  border-bottom: 1px solid #DDD;
+  display: flex;
+}
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+li {
+  display: flex;
+  padding: 12px;
+}
+li:nth-child(even) {
+  background: #F1F1F1;
+}
+li.select {
+  cursor: pointer;
+}
+li.select:hover {
+  background: #DDD;
+}
+
+.stock-amount {
+  display: inline-block;
+  text-align: center;
+  width: 40px;
+}

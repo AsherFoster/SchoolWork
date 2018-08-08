@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Comic Managing Thing</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <!-- dev version -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- production version, optimized for size and speed -->
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
+  </head>
+  <body>
+    <div id="app">
+      <nav>
+        <nav-link href="sales">Sales</nav-link>
+        <nav-link href="stock">Stocking</nav-link>
+        <nav-link href="stats">Statistics</nav-link>
+      </nav>
+      <nav-view name="sales" :current="page">
+        <h1>Sell comics.</h1>
+        <div class="list-header">
+          Title
+          <span class="flex"></span>
+          Amount
+        </div>
+        <ul>
+          <!-- @click registers click handler -->
+          <li v-for="comic in store.items" @click="() => sell(comic.title)" class="select">
+            {{comic.title}}
+            <span class="flex"></span>
+            {{comic.amount}}
+          </li>
+        </ul>
+      </nav-view>
+      <nav-view name="stock" :current="page">
+        <h1>Stock things!</h1>
+        <div class="list-header">
+          Title
+          <span class="flex"></span>
+          Amount in stock
+        </div>
+        <ul>
+          <li v-for="comic in stockItems">
+            {{comic.title}}
+            <span class="flex"></span>
+            <span>
+              <!--<button @click="() => comic.amount&#45;&#45;">-</button>-->
+              <!--<span class="stock-amount">{{comic.amount}}</span>-->
+              <!--<button @click="() => comic.amount++">+</button>-->
+              <span v-if="comic.error">{{comic.error}}</span>
+              <input type="number" @input="(e) => stockUpdate(comic.title, e)" :value="comic.displayAmount" class="stock-amount">
+            </span>
+          </li>
+        </ul>
+      </nav-view>
+      <nav-view name="stats" :current="page">
+        <h1>Sales stats</h1>
+        <div class="list-header">
+          Title
+          <span class="flex"></span>
+          Amount sold
+        </div>
+        <ul>
+          <li v-for="comic in store.items">
+            {{comic.title}}
+            <span class="flex"></span>
+            {{store.sales[comic.title] || 'None sold'}}
+          </li>
+        </ul>
+      </nav-view>
+      <transition name="slide">
+        <div id="notification" v-if="notification" :style="{background: notification.color}">
+          <p id="notification-text">{{notification.message}}</p>
+        </div>
+      </transition>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
