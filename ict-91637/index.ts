@@ -1,3 +1,5 @@
+declare const Vue: any;
+
 interface Comic {
   title: string;
   amount: number;
@@ -15,6 +17,14 @@ class Store {
   constructor(
     public items: Comic[] = []
   ) {}
+  // Gets the amount of a comic in stock
+  public getStock(title: string): number {
+    return this.getItem(title).amount;
+  }
+  // Sets the amount of a comic available
+  public setStock(title: string, amount: number): void {
+    this.getItem(title).amount = amount;
+  }
   // Changes the amount of a given comic in stock. Does not affect sales (Can be negative)
   public changeStock(title: string, amount: number): number {
     return this.items.find(c => c.title === title).amount += amount
@@ -102,7 +112,7 @@ const app = new Vue({
     notification: null, // Current notification
     notifQueue: [], // Queue of notifications to display
     page: 'sales', // Current page being displayed
-    stockItems: comicStore.items.map(i => ({ // Initializes the stock page
+    stockItems: comicStore.items.map(i => ({ // Initializes the stock page, see explainer in routeUpdate method
       displayAmount: i.amount,
       error: '',
       title: i.title
@@ -111,9 +121,9 @@ const app = new Vue({
   methods: {
     // Sells a comic, if possible
     sell(title: string) {
-      if(comicStore.getItem(title).amount < 1)
+      if(this.store.getStock(title) < 1)
         return this.queueNotif(`${title} is out of stock`, 3000, 'error');
-      comicStore.sell(title);
+      this.store.sell(title);
       this.queueNotif(`Sold "${title}"`, 1000);
     },
     // Queues a notification
@@ -152,7 +162,7 @@ const app = new Vue({
       } else if(amount > Number.MAX_SAFE_INTEGER) {
         stockItem.error = 'Ok, that number is a bit big.';
       } else { // If valid, update stock amount, hide error
-        this.comicStore.getItem(title).amount = amount;
+        this.store.setStock(title, amount);
         stockItem.error = '';
       }
       stockItem.displayAmount = value; // Updates the text input's value to the value because binding!
@@ -160,6 +170,10 @@ const app = new Vue({
     // Route update to clean up stock page when loaded again
     routeUpdate(to: string, from: string) {
       if(to === 'stock') {
+        /* The stock page requires a separate list of items in order to be able to correctly accept invalid inputs,
+        as well as showing errors properly, because there must be custom ui attributes linked to the item. This list
+        gets recreated whenever the stock page is loaded, so that any invalid inputs are fixed, and errors are hidden.
+         *  */
         this.stockItems = this.store.items.map(i => ({
           displayAmount: i.amount,
           error: '',

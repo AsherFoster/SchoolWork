@@ -11,6 +11,14 @@ class Store {
         // Object used to keep track of how many comics have been sold
         this.sales = {};
     }
+    // Gets the amount of a comic in stock
+    getStock(title) {
+        return this.getItem(title).amount;
+    }
+    // Sets the amount of a comic available
+    setStock(title, amount) {
+        this.getItem(title).amount = amount;
+    }
     // Changes the amount of a given comic in stock. Does not affect sales (Can be negative)
     changeStock(title, amount) {
         return this.items.find(c => c.title === title).amount += amount;
@@ -97,9 +105,9 @@ const app = new Vue({
     methods: {
         // Sells a comic, if possible
         sell(title) {
-            if (comicStore.getItem(title).amount < 1)
+            if (this.store.getStock(title) < 1)
                 return this.queueNotif(`${title} is out of stock`, 3000, 'error');
-            comicStore.sell(title);
+            this.store.sell(title);
             this.queueNotif(`Sold "${title}"`, 1000);
         },
         // Queues a notification
@@ -143,7 +151,7 @@ const app = new Vue({
                 stockItem.error = 'Ok, that number is a bit big.';
             }
             else { // If valid, update stock amount, hide error
-                this.comicStore.getItem(title).amount = amount;
+                this.store.setStock(title, amount);
                 stockItem.error = '';
             }
             stockItem.displayAmount = value; // Updates the text input's value to the value because binding!
@@ -151,6 +159,10 @@ const app = new Vue({
         // Route update to clean up stock page when loaded again
         routeUpdate(to, from) {
             if (to === 'stock') {
+                /* The stock page requires a separate list of items in order to be able to correctly accept invalid inputs,
+                as well as showing errors properly, because there must be custom ui attributes linked to the item. This list
+                gets recreated whenever the stock page is loaded, so that any invalid inputs are fixed, and errors are hidden.
+                 *  */
                 this.stockItems = this.store.items.map(i => ({
                     displayAmount: i.amount,
                     error: '',
